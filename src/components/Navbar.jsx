@@ -2,35 +2,86 @@ import React from 'react'
 import { links, social } from './data'
 import { useState, useRef, useEffect } from 'react'
 import { Menu } from 'lucide-react'
+import { X } from 'lucide-react'
 
 function Navbar() {
   const [showLinks, setShowLinks] = useState(false)
-  const linksContainerRef = useRef(null)
-  const linksRef = useRef(null)
+  const linksContainerRef = useRef(null);
+  const linksRef = useRef(null);
+  const navbarRef = useRef(null);
+  const navHeaderRef = useRef(null);
+  const navRightRef = useRef(null);
 
   const toggleLinks = () => {
     setShowLinks(!showLinks)
   }
-
-  // Determine if mobile
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+ 
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (isMobile) {
-      const linksHeight = linksRef.current.getBoundingClientRect().height;
-      if (showLinks) {
-        linksContainerRef.current.style.height = `${linksHeight}px`;
-      } else {
-        linksContainerRef.current.style.height = '0px';
-      }
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      
+      // Reset menu state when switching from mobile to desktop
+      if (!mobile && showLinks) {
+        setShowLinks(false);
+      } 
+    };
+
+    // Check on mount
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [showLinks]);
+
+useEffect(() => {
+  if (!linksRef.current || !linksContainerRef.current) return;
+
+  const linksEl = linksRef.current;
+  const containerEl = linksContainerRef.current;
+
+  const fullHeight = linksEl.scrollHeight;
+
+  if (showLinks) {
+    containerEl.style.height = `${fullHeight}px`;
+  } else {
+    containerEl.style.height = '0px';
+  }
+}, [showLinks]);
+
+
+
+  // Trap focus on open mobile menu
+  useEffect(() => {
+    if (isMobile && showLinks) {
+      document.body.style.overflow = 'hidden';
     } else {
-      linksContainerRef.current.style.height = 'auto';
+      document.body.style.overflow = '';
     }
   }, [showLinks, isMobile]);
 
+  // ESC key close
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'Escape' && showLinks) {
+        setShowLinks(false);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [showLinks]);
+
+
+
+
   return (
-    <nav className={`custom-navbar ${showLinks ? 'expanded' : ''}`}>
-      <div className='nav-header'>
+    <nav className={`custom-navbar ${showLinks ? 'expanded' : ''}`} ref={navbarRef}>
+      <div className='nav-header' ref={navHeaderRef}>
         Logo
       </div>
       <div className='links-container' ref={linksContainerRef}>
@@ -45,9 +96,9 @@ function Navbar() {
           })}
         </ul>
       </div>
-      <div className='nav-right'>
+      <div className='nav-right' ref={navRightRef}>
         <button className='nav-toggle' onClick={toggleLinks}>
-          <Menu />
+          {showLinks ? <X /> : <Menu />}
         </button>
         <ul className='social-links'>
           {social.map((socialIcon) => {
