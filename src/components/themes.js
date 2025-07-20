@@ -60,7 +60,7 @@ export const themes = {
         pageContentColor: '#ecf0f1',
         
         // Navbar - WHITE (for contrast against dark background) - WHITE FONTS
-        navbarBackground: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(240,248,255,0.25) 100%)',
+        navbarBackground: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(245,245,245,0.3) 100%)',
         navbarShadow: '0 8px 16px rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         
         // Text colors - WHITE (for white navbar)
@@ -71,7 +71,7 @@ export const themes = {
         socialLinksColor: '#2c3e50',
         
         // Links hover
-        linksHoverBackground: 'rgba(255, 255, 255, 0.2)',
+        linksHoverBackground: 'rgba(255, 255, 255, 0.4)',
         linksHoverColor: '#ffffff',
         
         // Social links hover
