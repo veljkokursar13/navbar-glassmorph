@@ -54,8 +54,6 @@ useEffect(() => {
   }
 }, [showLinks]);
 
-
-
   // Trap focus on open mobile menu
   useEffect(() => {
     if (isMobile && showLinks) {
@@ -75,9 +73,6 @@ useEffect(() => {
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [showLinks]);
-
-
-
 
   return (
     <nav className={`custom-navbar ${showLinks ? 'expanded' : ''}`} ref={navbarRef}>
